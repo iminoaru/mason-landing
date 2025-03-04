@@ -3,241 +3,238 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
-
-const SEPARATION = 70
-const AMOUNTX = 40
-const AMOUNTY = 40
-
-const vertexShader = `
-  varying vec3 vPosition;
-  void main() {
-    vPosition = position;
-    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-    gl_Position = projectionMatrix * mvPosition;
-  }
-`
-
-const fragmentShader = `
-  uniform vec3 color;
-  uniform float time;
-  varying vec3 vPosition;
-  
-  void main() {
-    float opacity = 0.2 + 0.3 * sin(vPosition.x * 0.02 + time);
-    vec3 finalColor = color * (0.8 + 0.2 * sin(vPosition.z * 0.01 + time * 0.5));
-    gl_FragColor = vec4(finalColor, opacity);
-  }
-`
+import Image from 'next/image'
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<THREE.Scene | null>(null)
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
-  const meshRef = useRef<THREE.LineSegments | null>(null)
-  const frameRef = useRef<number | null>(null)
-  const mouseX = useRef<number>(0)
-  const mouseY = useRef<number>(0)
-  const windowHalfX = useRef<number>(0)
-  const windowHalfY = useRef<number>(0)
-  const countRef = useRef<number>(0)
-  const timeRef = useRef<number>(0)
 
   useEffect(() => {
     if (!containerRef.current) return
 
-    const init = () => {
-      sceneRef.current = new THREE.Scene()
-      cameraRef.current = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000)
-      cameraRef.current.position.z = 1500
-      cameraRef.current.position.y = -100
+    // Scene setup
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(
+      750,
+      window.innerWidth / window.innerHeight,
+      2,
+      100
+    )
+    camera.position.set(3, 4, 5)
+    camera.lookAt(0, 0, 0)
 
-      const geometry = new THREE.BufferGeometry()
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          color: { value: new THREE.Color(0x7b2fff) },
-          time: { value: 0 }
-        },
-        vertexShader,
-        fragmentShader,
-        transparent: true,
-        wireframe: true,
-        blending: THREE.AdditiveBlending
-      })
+    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    containerRef.current.appendChild(renderer.domElement)
 
-      const vertices = []
-      const indices = []
-      
-      for (let ix = 0; ix < AMOUNTX; ix++) {
-        for (let iy = 0; iy < AMOUNTY; iy++) {
-          const x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2)
-          const z = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2)
-          vertices.push(x, 0, z)
-
-          if (ix < AMOUNTX - 1 && iy < AMOUNTY - 1) {
-            const currentIndex = ix * AMOUNTY + iy
-            indices.push(currentIndex, currentIndex + 1)
-            indices.push(currentIndex, currentIndex + AMOUNTY)
-          }
-        }
-      }
-
-      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
-      geometry.setIndex(indices)
-
-      meshRef.current = new THREE.LineSegments(geometry, material)
-      meshRef.current.position.y = -400
-      meshRef.current.rotation.x = 0.2
-      sceneRef.current.add(meshRef.current)
-
-      rendererRef.current = new THREE.WebGLRenderer({ 
-        antialias: true,
-        alpha: true 
-      })
-      rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      rendererRef.current.setSize(window.innerWidth, window.innerHeight)
-      containerRef.current?.appendChild(rendererRef.current.domElement)
-
-      windowHalfX.current = window.innerWidth / 2
-      windowHalfY.current = window.innerHeight / 2
+    // Updated Galaxy parameters
+    const parameters = {
+      count: 80000,
+      size: 0.02, // Slightly larger particles
+      radius: 6,   // Larger radius
+      branches: 12, // Fewer branches for more separation
+      spin: 0.8,   // More spin for more pronounced spiral
+      randomness: 0.2,
+      randomnessPower: 4.5,
+      insideColor: 0x00ff88, // Soft green
+      outsideColor: 0x0066ff, // Deep blue
     }
 
-    const onWindowResize = () => {
-      windowHalfX.current = window.innerWidth / 2
-      windowHalfY.current = window.innerHeight / 2
+    // Generate galaxy
+    const positions = new Float32Array(parameters.count * 3)
+    const colors = new Float32Array(parameters.count * 3)
+    const colorInside = new THREE.Color(parameters.insideColor)
+    const colorOutside = new THREE.Color(parameters.outsideColor)
 
-      if (cameraRef.current && rendererRef.current) {
-        cameraRef.current.aspect = window.innerWidth / window.innerHeight
-        cameraRef.current.updateProjectionMatrix()
-        rendererRef.current.setSize(window.innerWidth, window.innerHeight)
-      }
+    for (let i = 0; i < parameters.count; i++) {
+      const i3 = i * 3
+      const radius = Math.random() * parameters.radius
+      const branchAngle = ((i % parameters.branches) / parameters.branches) * Math.PI * 4
+      const spin = radius * parameters.spin
+
+      const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1)
+      const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1)
+      const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1)
+
+      positions[i3] = Math.cos(branchAngle + spin) * radius + randomX
+      positions[i3 + 1] = randomY
+      positions[i3 + 2] = Math.sin(branchAngle + spin) * radius + randomZ
+
+      const mixedColor = colorInside.clone()
+      mixedColor.lerp(colorOutside, radius / parameters.radius)
+
+      colors[i3] = mixedColor.r
+      colors[i3 + 1] = mixedColor.g
+      colors[i3 + 2] = mixedColor.b
     }
 
-    const onPointerMove = (event: PointerEvent) => {
-      if (event.isPrimary === false) return
-      mouseX.current = event.clientX - windowHalfX.current
-      mouseY.current = event.clientY - windowHalfY.current
-    }
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
 
-    const render = () => {
-      if (!cameraRef.current || !sceneRef.current || !meshRef.current || !rendererRef.current) return
+    const material = new THREE.PointsMaterial({
+      size: parameters.size,
+      sizeAttenuation: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexColors: true
+    })
 
-      cameraRef.current.position.x += (mouseX.current - cameraRef.current.position.x) * 0.01
-      cameraRef.current.lookAt(sceneRef.current.position)
+    const points = new THREE.Points(geometry, material)
+    points.position.y = -1.5
+    scene.add(points)
 
-      const positions = meshRef.current.geometry.attributes.position.array as Float32Array
-      const material = meshRef.current.material as THREE.ShaderMaterial
-      
-      timeRef.current += 0.01
-      material.uniforms.time.value = timeRef.current
-
-      let i = 1
-      for (let ix = 0; ix < AMOUNTX; ix++) {
-        for (let iy = 0; iy < AMOUNTY; iy++) {
-          positions[i] = (Math.sin((ix + countRef.current) * 0.2) * 50) +
-            (Math.sin((iy + countRef.current) * 0.3) * 50)
-          i += 3
-        }
-      }
-
-      meshRef.current.geometry.attributes.position.needsUpdate = true
-      rendererRef.current.render(sceneRef.current, cameraRef.current)
-      countRef.current += 0.02
-    }
-
+    // Animation
     const animate = () => {
-      frameRef.current = requestAnimationFrame(animate)
-      render()
+      points.rotation.y += 0.0004 // Slightly slower rotation
+      renderer.render(scene, camera)
+      requestAnimationFrame(animate)
     }
-
-    init()
     animate()
 
-    window.addEventListener('resize', onWindowResize)
-    if (containerRef.current) {
-      containerRef.current.style.touchAction = 'none'
-      containerRef.current.addEventListener('pointermove', onPointerMove)
+    // Handle resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
     }
+    window.addEventListener('resize', handleResize)
 
+    // Cleanup
     return () => {
-      if (frameRef.current) {
-        cancelAnimationFrame(frameRef.current)
-      }
-      window.removeEventListener('resize', onWindowResize)
-      containerRef.current?.removeEventListener('pointermove', onPointerMove)
-      
-      if (rendererRef.current) {
-        rendererRef.current.dispose()
-      }
-      if (meshRef.current) {
-        meshRef.current.geometry.dispose()
-        ;(meshRef.current.material as THREE.Material).dispose()
-      }
+      window.removeEventListener('resize', handleResize)
+      geometry.dispose()
+      material.dispose()
+      renderer.dispose()
     }
   }, [])
 
   return (
-    <main className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-[#0a0014] via-[#120029] to-[#1a0033]">
+    <main className="relative w-full h-screen overflow-hidden bg-black">
       <div ref={containerRef} className="absolute inset-0" />
       
-      <div className="relative z-10 h-full flex flex-col items-start justify-center px-8 md:px-16 lg:px-24">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl"
+      {/* Logo in top-left corner */}
+      <div className="absolute top-6 left-6 z-20">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ 
+            duration: 0.5,
+            type: "spring",
+            stiffness: 120
+          }}
         >
-          <motion.h1 
-            className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Welcome to the Future
-          </motion.h1>
-          
-          <motion.p 
-            className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Experience the next generation of digital innovation where imagination meets technology.
-          </motion.p>
-
-          <motion.div 
-            className="mt-10 flex flex-wrap gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition-colors"
-            >
-              Get Started
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 rounded-full border border-purple-400 text-purple-400 font-medium hover:bg-purple-400/10 transition-colors"
-            >
-              Learn More
-            </motion.button>
-          </motion.div>
+          <Image
+            src="/favicon.ico"
+            alt="Bytemason Logo"
+            width={40}
+            height={40}
+            className="w-8 h-8 md:w-10 md:h-10 hover:opacity-80 transition-opacity"
+          />
         </motion.div>
+      </div>
 
-        <motion.div 
-          className="absolute bottom-8 left-8 md:left-16 lg:left-24 text-sm text-gray-500"
+      <div className="relative z-10 h-full flex items-center justify-center -mt-24 md:-mt-32">
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 1 }}
+          className="text-center space-y-6 px-4 md:px-0"
         >
-          Powered by{' '}
-          <a href="https://threejs.org" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
-            Three.js
-          </a>
+          {/* Title with character animation */}
+          <motion.h1 
+            className="font-pixelify font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white"
+          >
+            {["B", "y", "t", "e", "M", "a", "s", "o", "n"].map((letter, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.1,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 10
+                }}
+                className="inline-block hover:text-white/80 transition-colors duration-300"
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.h1>
+
+          {/* Subheading with slide-up fade */}
+          <motion.p 
+            className="font-pixelify text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/70"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              delay: 0.8,
+              duration: 0.8,
+              type: "spring",
+              stiffness: 100
+            }}
+          >
+            Prompt to code from you CLI by a team of AI agents
+          </motion.p>
+
+          {/* Buttons with staggered appearance */}
+          <motion.div 
+            className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 pt-8 md:pt-10"
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.2,
+                  delayChildren: 1.2
+                }
+              }
+            }}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.a
+              href="lumiralabs.github.io/bytemason/"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0 }
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                backgroundColor: "rgba(255, 255, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixelify text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Documentation</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17l9.2-9.2M17 17V7H7"/>
+              </svg>
+            </motion.a>
+            
+            <motion.a
+              href="https://github.com/lumiralabs/bytemason"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0 }
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                backgroundColor: "rgba(255, 255, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixelify text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Open Source</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+            </motion.a>
+          </motion.div>
         </motion.div>
       </div>
     </main>
