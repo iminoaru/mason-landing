@@ -143,7 +143,7 @@ export default function Home() {
         >
           {/* Title with character animation */}
           <motion.h1 
-            className="font-pixelify font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white"
+            className="font-pixelify  text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white"
           >
             {["B", "y", "t", "e", "M", "a", "s", "o", "n"].map((letter, i) => (
               <motion.span
@@ -176,7 +176,7 @@ export default function Home() {
               stiffness: 100
             }}
           >
-            Prompt to code from you CLI by a team of AI agents
+            Prompt to code from your CLI by a team of AI agents
           </motion.p>
 
           {/* Buttons with staggered appearance */}
