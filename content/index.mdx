@@ -1,84 +1,151 @@
-# Welcome to ByteMason
+# Introduction
 
-Transform your ideas into full-stack applications with just a few words.
+Turn your ideas into full stack applications with AI-powered code generation.
 
 ## What is ByteMason?
 
-ByteMason is your AI-powered development companion that turns natural language descriptions into complete, production-ready web applications. Whether you're a beginner or an experienced developer, ByteMason helps you:
+ByteMason is an intelligent development tool that transforms natural language descriptions into complete, production-ready web applications. It's designed for both beginners and experienced developers who want to:
 
-- Create full-stack Next.js applications without writing boilerplate code
-- Set up and manage your database with Supabase
-- Build beautiful user interfaces using Tailwind CSS and shadcn/ui
-- Handle user authentication and data security
-- Fix common development issues automatically
+- Build full-stack Next.js applications quickly
+- Focus on business logic instead of boilerplate
+- Maintain high code quality and best practices
+- Automate repetitive development tasks
 
-## How It Works
+## Prerequisites
+
+- Python 3.10 or higher
+- Anthropic API key
+- OpenAI API key
+
+
+## Quick Start
 
 ```bash
-# Create your project
+# Install ByteMason
+pip install bytemason
+
+# Set up environment
+export ANTHROPIC_API_KEY=your_key
+export OPENAI_API_KEY=your_key
+
+# Create and generate your app
 berry new my-shop
-
-# Describe what you want to build
-berry plan "Create an online shop where users can browse products, 
-add them to cart, and checkout. Include user authentication 
-and product categories."
-
-# Generate your application
+cd my-shop
+berry plan "Create an online shop with product catalog, 
+shopping cart, and user authentication"
 berry code ./spec/specification.json
 ```
 
-ByteMason works in three simple steps:
+## How It Works
 
-1. **Understanding**: ByteMason analyzes your description to understand what you want to build
-2. **Planning**: It creates a detailed technical specification for your application
-3. **Building**: It generates clean, maintainable code and fixes any issues automatically
+ByteMason uses a three-phase approach:
 
-## Key Features
+1. **Understanding** - AI analyzes your requirements
+2. **Planning** - Generates detailed technical specifications
+3. **Building** - Creates and validates your application
 
-**Smart Understanding**
-- Converts natural language into technical specifications
-- Identifies required features and components
-- Plans database structure and API endpoints
+## Core Features
 
-**Complete Setup**
-- Configures Next.js 14 with App Router
-- Sets up Supabase database and authentication
-- Integrates modern UI components
+**AI-Powered Development**
+- Natural language to code conversion
+- Automatic error detection and fixing
+- Smart code generation and repair
+
+**Modern Stack**
+- Next.js 14 with App Router
+- Supabase for backend
+- TypeScript for type safety
+- shadcn/ui components
 
 **Developer Experience**
-- Automatic error detection and fixing
-- Clean, documented code generation
-- Modern development stack
+- Clean, maintainable code
+- Automated testing setup
+- Type-safe database queries
+- Modern development patterns
 
-**Built-in Best Practices**
-- Type-safe with TypeScript
-- Secure authentication flows
-- Responsive design patterns
-- Database migration handling
+## Documentation Structure
 
-## Getting Started
+### Getting Started
+- [Installation](documentation/getting-started/installation.mdx) - Set up ByteMason on your machine
+- [Quick Start](documentation/getting-started/quickstart.mdx) - Build your first app in minutes
+- [Core Concepts](documentation/core-concepts/architecture.mdx) - Understand how ByteMason works
 
-Ready to build your next project? Start with our [Installation Guide](/getting-started/installation) or dive into the [Core Concepts](/core-concepts/architecture) to understand how ByteMason works.
+### Guides
+- [Building Your First App](documentation/guides/building-todo-app.mdx) - Step-by-step tutorial
+- [Database Management](documentation/guides/database-management.mdx) - Working with Supabase
+- [Local Development](documentation/guides/local-development.mdx) - Contributing to ByteMason
+
+### Reference
+- [CLI Commands](documentation/api-reference/commands.mdx) - Complete command reference
+- [Configuration](documentation/api-reference/configuration.mdx) - Configure ByteMason
+- [API Reference](documentation/api-reference/api.mdx) - API documentation
 
 ## Example Applications
 
-Here are some things you can build with ByteMason:
+ByteMason can help you build:
 
-- Todo applications with categories and sharing
-- Blog platforms with comments and authentication
-- E-commerce stores with product management
-- Social platforms with user profiles
-- Dashboard applications with data visualization
+**Web Applications**
+- E-commerce platforms
+- Content management systems
+- Social networking apps
+- Admin dashboards
+- Booking systems
 
-## Documentation Sections
+**Features**
+- User authentication
+- Database CRUD operations
+- Real-time updates
+- File uploads
+- API integrations
 
-- **[Getting Started](/getting-started)**: Installation and first steps
-- **[Core Concepts](/core-concepts)**: Understanding ByteMason's architecture
-- **[Guides](/guides)**: Step-by-step tutorials
-- **[API Reference](/api-reference)**: Detailed command documentation
+## Local Development
+
+Want to contribute or modify ByteMason? It's easy to get started:
+
+```bash
+# Clone and setup
+git clone https://github.com/lumiralabs/bytemason.git
+cd bytemason
+
+# Create virtual environment (Python 3.10 or higher)
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+
+# Install dependencies
+pip install -e .
+
+# Set environment variables
+cp .env.example .env
+# Add your API keys to .env
+```
+
+[Learn more about local development →](documentation/guides/local-development.mdx)
+
+## Best Practices
+
+1. **Writing Effective Prompts**
+   ```bash
+   # Be specific about features
+   berry plan "Build a blog with categories, tags, 
+   comments, and email notifications for new posts"
+   ```
+
+2. **Working with Generated Code**
+   - Review generated files
+   - Make incremental changes
+   - Use version control
+
+3. **Database Management**
+   - Review migrations
+   - Test data relationships
+   - Validate security rules
 
 ## Community and Support
 
 - [GitHub Repository](https://github.com/lumiralabs/bytemason)
-- [Discord Community](https://discord.gg/bytemason)
-- [Twitter Updates](https://twitter.com/bytemason) 
+- [Documentation Issues](https://github.com/lumiralabs/bytemason/issues)
+
+## Contributing
+
+We welcome contributions! See our [Contributing Guide](ocumentation/guides/local-development#contributing-guidelines) to get started.
+
