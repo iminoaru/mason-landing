@@ -1,0 +1,75 @@
+# Installation & Setup
+
+Learn how to install and set up ByteMason for your development environment.
+
+## Prerequisites
+
+Before installing ByteMason, ensure you have:
+
+- Python 3.8 or higher
+- Node.js 18.0.0 or higher
+- npm or yarn package manager
+- A Supabase account (free tier works great!)
+
+## Installation
+
+Install ByteMason using uv:
+
+```bash
+uv pip install bytemason
+```
+
+## Initial Setup
+
+1. **Verify Installation**
+
+```bash
+berry --version
+```
+
+2. **Configure Supabase Credentials**
+
+You'll need these when running database commands:
+- Project URL
+- Service Role Key (found in Project Settings > API)
+
+## Your First Project
+
+1. **Create a New Project**
+
+```bash
+berry new my-first-app
+cd my-first-app
+```
+
+2. **Generate Specification**
+
+```bash
+berry plan "Create a todo app with user authentication, categories, and due dates"
+```
+
+3. **Set Up Database**
+
+```bash
+berry db setup ./spec/specification.json
+berry db push
+```
+
+4. **Generate Code**
+
+```bash
+berry code ./spec/specification.json
+```
+
+5. **Start Development Server**
+
+```bash
+npm install
+npm run dev
+```
+
+## What's Next?
+
+- Explore [Core Concepts](/core-concepts) to understand how ByteMason works
+- Check out our [Guides](/guides) for detailed tutorials
+- Learn about all available commands in the [API Reference](/api-reference) 

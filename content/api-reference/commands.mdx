@@ -1,0 +1,100 @@
+# ByteMason CLI Reference
+
+Complete reference for all ByteMason CLI commands.
+
+## Core Commands
+
+### `berry new`
+
+Creates a new ByteMason project.
+
+```bash
+berry new <project-name> [options]
+```
+
+**Options:**
+- `--template` - Specify a starter template
+- `--path` - Custom installation path
+
+### `berry plan`
+
+Generates a specification from your prompt.
+
+```bash
+berry plan <prompt> [options]
+```
+
+**Options:**
+- `--output` - Custom output path for specification
+- `--model` - AI model to use (default: gpt-4)
+
+### `berry code`
+
+Generates application code from specification.
+
+```bash
+berry code <spec-path> [options]
+```
+
+**Options:**
+- `--force` - Overwrite existing files
+- `--skip-install` - Skip dependency installation
+
+## Database Commands
+
+### `berry db setup`
+
+Configures Supabase connection and generates migrations.
+
+```bash
+berry db setup <spec-path> [options]
+```
+
+**Options:**
+- `--url` - Supabase project URL
+- `--key` - Service role key
+
+### `berry db push`
+
+Pushes migrations to Supabase.
+
+```bash
+berry db push [options]
+```
+
+**Options:**
+- `--dry-run` - Preview changes without applying
+
+## Maintenance Commands
+
+### `berry repair`
+
+Fixes build errors automatically.
+
+```bash
+berry repair [options]
+```
+
+**Options:**
+- `--verbose` - Show detailed repair steps
+- `--max-attempts` - Maximum repair attempts
+
+### `berry clean`
+
+Cleans generated files and caches.
+
+```bash
+berry clean [options]
+```
+
+**Options:**
+- `--deep` - Remove all generated content
+- `--cache-only` - Only clear caches
+
+## Environment Variables
+
+ByteMason uses these environment variables:
+
+- `SUPABASE_URL` - Your Supabase project URL
+- `SUPABASE_KEY` - Your service role key
+- `OPENAI_API_KEY` - OpenAI API key for AI operations 

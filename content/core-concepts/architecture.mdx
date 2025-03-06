@@ -1,0 +1,189 @@
+# How ByteMason Works
+
+Let's dive into how ByteMason turns your ideas into working applications. We'll explain the process in both simple and technical terms.
+
+## The Journey of Your Idea
+
+When you use ByteMason, your idea goes through three main phases:
+
+### Phase 1: Understanding & Planning
+
+When you run `berry plan`, ByteMason:
+
+1. **Reads Your Description**
+   - Takes your natural language description
+   - Understands what features you need
+   - Plans the application structure
+
+2. **Creates a Specification**
+   This is like a detailed blueprint that includes:
+   ```json
+   {
+     "name": "TodoApp",
+     "features": {
+       "authentication": true,
+       "database": {
+         "tables": [
+           {
+             "name": "todos",
+             "columns": [
+               {"name": "title", "type": "text"},
+               {"name": "completed", "type": "boolean"},
+               {"name": "user_id", "type": "uuid"}
+             ]
+           }
+         ]
+       },
+       "ui": {
+         "pages": ["home", "todos", "profile"],
+         "components": ["TodoList", "TodoItem", "CreateTodoForm"]
+       }
+     }
+   }
+   ```
+
+### Phase 2: Building Your App
+
+During `berry code`, ByteMason:
+
+1. **Sets Up the Project**
+   ```bash
+   your-app/
+   ├── app/              # Your pages and routes
+   ├── components/       # Reusable UI parts
+   ├── lib/             # Helper functions
+   └── public/          # Images and other files
+   ```
+
+2. **Creates Components**
+   ```tsx
+   // Example of a generated component
+   export function TodoList() {
+     const { data: todos } = useTodos()
+     
+     return (
+       <div className="space-y-4">
+         {todos.map(todo => (
+           <TodoItem key={todo.id} {...todo} />
+         ))}
+       </div>
+     )
+   }
+   ```
+
+3. **Sets Up the Database**
+   - Creates tables in Supabase
+   - Sets up authentication
+   - Adds security rules
+
+### Phase 3: Quality Check & Fixes
+
+The `berry repair` command:
+
+1. **Checks Everything**
+   - Builds the application
+   - Looks for any errors
+   - Identifies missing pieces
+
+2. **Fixes Problems**
+   - Adds missing imports
+   - Installs needed packages
+   - Fixes type errors
+   - Ensures everything works together
+
+## Key Components
+
+### 1. Project Structure
+```
+your-app/
+├── app/                    # Next.js 14 App Router
+│   ├── page.tsx           # Home page
+│   ├── todos/             # Todo features
+│   └── api/               # API endpoints
+├── components/            # UI components
+├── lib/                   # Shared code
+│   ├── api/              # API functions
+│   └── db/               # Database helpers
+└── public/               # Static files
+```
+
+### 2. Technology Stack
+
+- **Frontend**
+  - Next.js 14 with App Router
+  - React for UI components
+  - Tailwind CSS for styling
+  - shadcn/ui for UI components
+
+- **Backend**
+  - Next.js API routes
+  - Supabase for database
+  - TypeScript for type safety
+
+### 3. Development Tools
+
+- **Code Generation**
+  - AI-powered code writing
+  - Modern best practices
+  - Clean code structure
+
+- **Database Management**
+  - Automatic migrations
+  - Type-safe queries
+  - Secure access patterns
+
+## Best Practices
+
+1. **Writing Good Prompts**
+   ```bash
+   # Good prompt
+   berry plan "Create a todo app with categories, due dates,
+   and the ability to share lists with other users"
+   ```
+
+2. **Working with Generated Code**
+   - Review the generated files
+   - Make small changes first
+   - Use `berry repair` when needed
+
+3. **Database Changes**
+   - Update the specification first
+   - Run `berry db push` to apply changes
+   - Test with sample data
+
+## Common Workflows
+
+1. **Starting a New Project**
+   ```bash
+   berry new my-app
+   cd my-app
+   berry plan "your description"
+   berry code ./spec/specification.json
+   ```
+
+2. **Making Changes**
+   ```bash
+   # Update specification
+   berry plan "Add user profiles to the todo app"
+   
+   # Generate new code
+   berry code ./spec/specification.json
+   
+   # Fix any issues
+   berry repair
+   ```
+
+3. **Database Updates**
+   ```bash
+   # Update database
+   berry db push
+   
+   # Start development
+   npm run dev
+   ```
+
+## Next Steps
+
+- Learn about [AI Components](/core-concepts/ai-components)
+- Try the [Todo App Tutorial](/guides/building-todo-app)
+- Explore [Advanced Features](/guides/advanced-features) 
