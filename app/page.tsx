@@ -196,7 +196,8 @@ export default function Home() {
             animate="show"
           >
             <motion.a
-              href="https://lumiralabs.github.io/bytemason/"
+              // href="https://lumiralabs.github.io/bytemason/"
+              href='/documentation'
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 show: { opacity: 1, y: 0 }

@@ -12,6 +12,8 @@
     "@react-three/fiber": "^9.0.4",
     "framer-motion": "^12.4.10",
     "next": "15.2.1",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "three": "^0.174.0"
