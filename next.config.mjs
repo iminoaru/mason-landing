@@ -5,7 +5,8 @@ import nextra from 'nextra'
 const nextConfig = {};
 
 const withNextra = nextra({
-    contentDirBasePath: '/documentation'
-  })
+  contentDirBasePath: '/documentation',
+  defaultShowCopyCode: true,
+})
    
 export default withNextra(nextConfig)
