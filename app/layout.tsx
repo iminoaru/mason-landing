@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-import { Pixelify_Sans } from "next/font/google";
 import "./globals.css";
-
-const pixelifySans = Pixelify_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-pixelify',
-  display: 'swap',
-});
+import { pixelifySans } from "./fonts";
 
 export const metadata: Metadata = {
   title: "ByteMason",
@@ -21,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${pixelifySans.className} antialiased`}>
+      <body className={pixelifySans.className}>
         {children}
       </body>
     </html>

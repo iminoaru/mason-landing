@@ -2,12 +2,7 @@ import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import { GitHubIcon } from 'nextra/icons'
-
-
-export const metadata = {
-  // Define your metadata here
-  // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-}
+import { spaceGrotesk } from '../fonts'
 
 const navbar = (
   <Navbar
@@ -24,32 +19,25 @@ const navbar = (
           </span>
         </>
       }
-    
     projectLink='https://github.com/lumiralabs/bytemason'
     projectIcon={<GitHubIcon height="24" />}
   />
 )
 const footer = <Footer>{new Date().getFullYear()} © Lumira Labs.</Footer>
  
-export default async function RootLayout({ children }: { children: React.ReactNode; }) {
+export default async function DocLayout({ children }: { children: React.ReactNode; }) {
   return (
-    <html
-      lang="en"
-      dir="ltr"
-      suppressHydrationWarning
-    >
-      <body>
-        <Layout
-          navbar={navbar}
-          pageMap={await getPageMap()}
-          docsRepositoryBase="https://github.com/lumiralabs/bytemason"
-          footer={footer}
-          lastUpdated={<LastUpdated />}
-          darkMode = {false}
-        >
-          {children}
-        </Layout>
-      </body>
-    </html>
+    <div className={spaceGrotesk.className}>
+      <Layout
+        navbar={navbar}
+        pageMap={await getPageMap()}
+        docsRepositoryBase="https://github.com/lumiralabs/bytemason"
+        footer={footer}
+        lastUpdated={<LastUpdated />}
+        darkMode={false}
+      >
+        {children}
+      </Layout>
+    </div>
   )
 }

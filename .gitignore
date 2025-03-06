@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+_pagefind/
 # next.js
 /.next/
 /out/

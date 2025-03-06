@@ -9,4 +9,3 @@ const withNextra = nextra({
   })
    
 export default withNextra(nextConfig)
-

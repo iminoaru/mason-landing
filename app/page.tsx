@@ -143,7 +143,7 @@ export default function Home() {
         >
           {/* Title with character animation */}
           <motion.h1 
-            className="font-pixelify  text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white"
+            className="font-pixel text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white"
           >
             {["B", "y", "t", "e", "M", "a", "s", "o", "n"].map((letter, i) => (
               <motion.span
@@ -166,7 +166,7 @@ export default function Home() {
 
           {/* Subheading with slide-up fade */}
           <motion.p 
-            className="font-pixelify text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/70"
+            className="font-pixel text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/70"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -207,7 +207,7 @@ export default function Home() {
                 backgroundColor: "rgba(255, 255, 255, 0.15)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixelify text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixel text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
             >
               <span>Documentation</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -228,7 +228,7 @@ export default function Home() {
                 backgroundColor: "rgba(255, 255, 255, 0.15)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixelify text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+              className="px-6 sm:px-8 py-3 bg-white/10 rounded-lg font-pixel text-base sm:text-lg md:text-xl text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center justify-center gap-2"
             >
               <span>Open Source</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

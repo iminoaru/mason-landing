@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config: Config = {
   content: [
@@ -10,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        outfit: ["var(--font-outfit)", ...fontFamily.sans],
+        pixel: ["var(--font-pixelify-sans)"],
+        space: ["var(--font-space-grotesk)"],
       },
     },
   },
